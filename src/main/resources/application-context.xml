@@ -1,0 +1,10 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:rest="http://clix.biz.daum.net/schema/rest"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://clix.biz.daum.net/schema/rest
+       http://clix.biz.daum.net/schema/rest/spring-rest.xsd">
+	<rest:repositories base-package="org.springframework.data.rest.example" />
+</beans>
