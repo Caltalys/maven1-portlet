@@ -1,39 +1,48 @@
 package org.springframework.data.rest.example;
 
-import org.springframework.boot.autoconfigure.*;
+import javax.persistence.EntityManager;
+
+import net.daum.clix.springframework.data.rest.client.http.CommonsRestClient;
+import net.daum.clix.springframework.data.rest.client.http.RestClient;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.rest.RepositoryRestMvcAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
+import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.JndiDataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.JndiDataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
 import org.springframework.boot.autoconfigure.transaction.jta.JtaAutoConfiguration;
-import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
-import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
+
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.*;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import net.daum.clix.springframework.data.rest.client.http.CommonsRestClient;
-import net.daum.clix.springframework.data.rest.client.http.RestClient;
-import javax.servlet.*;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.InternalResourceView;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
-import org.springframework.web.servlet.ViewRendererServlet;
 
-@SpringBootApplication(exclude = { TransactionAutoConfiguration.class, DataSourceAutoConfiguration.class,
-				JndiDataSourceAutoConfiguration.class, JtaAutoConfiguration.class,
-				WebMvcAutoConfiguration.class, JerseyAutoConfiguration.class, FreeMarkerAutoConfiguration.class,
-				JpaRepositoriesAutoConfiguration.class, RepositoryRestMvcAutoConfiguration.class,
-                HibernateJpaAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class })
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import org.springframework.web.servlet.ViewRendererServlet;
+import org.springframework.web.servlet.view.InternalResourceView;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import javax.servlet.*;
+import org.springframework.boot.autoconfigure.*;
+import org.springframework.context.annotation.*;
+
+@SpringBootApplication(exclude = { /*TransactionAutoConfiguration.class, /*DataSourceAutoConfiguration.class,*/
+				/*JndiDataSourceAutoConfiguration.class,*/ JtaAutoConfiguration.class,
+				/*WebMvcAutoConfiguration.class, JerseyAutoConfiguration.class,*/ FreeMarkerAutoConfiguration.class,
+				JpaRepositoriesAutoConfiguration.class, RepositoryRestMvcAutoConfiguration.class
+                /*,HibernateJpaAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class*/ })
 @Controller
 @ImportResource({ "classpath*:application-context.xml" })
 public class ApplicationConfig extends SpringBootServletInitializer {
@@ -50,10 +59,13 @@ public class ApplicationConfig extends SpringBootServletInitializer {
 	private AddressRepository addresses;
 	@Autowired
 	private ProfileRepository profiles;
+	//@Autowired
+	private EntityManager em;
+
 
 	@Bean
 	RestClient restClient() {
-		return new CommonsRestClient("http://localhost:8180/spring-data-rest-webmvc");
+		return new CommonsRestClient("http://localhost:8080/spring-data-rest-webmvc");
 	}
 
 	@Bean
@@ -73,9 +85,9 @@ public class ApplicationConfig extends SpringBootServletInitializer {
 
 	@RequestMapping("/abc.j")
 	public String findByRsql() {
-		System.out.println("findByRsql");
-		System.out.println("findByRsql" + persons + " " + addresses + " " + profiles);
 		System.out.println(persons.count());
+		System.out.println("findByRsql" + em);
+		System.out.println("findByRsql" + persons + " " + addresses + " " + profiles);
 		return "";
 	}
 }

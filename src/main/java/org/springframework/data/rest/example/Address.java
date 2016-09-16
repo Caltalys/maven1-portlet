@@ -11,7 +11,7 @@ public class Address {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@ElementCollection
+	//@ElementCollection
 	private String[] lines;
 	private String city;
 	private String province;
